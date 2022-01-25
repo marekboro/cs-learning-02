@@ -1,0 +1,15 @@
+/Users/user/codeclan_work/afterCodeClan/techTest-IGS/tut/04.InheritanceInCSandNET/bin/Debug/net6.0/04.InheritanceInCSandNET
+/Users/user/codeclan_work/afterCodeClan/techTest-IGS/tut/04.InheritanceInCSandNET/bin/Debug/net6.0/04.InheritanceInCSandNET.deps.json
+/Users/user/codeclan_work/afterCodeClan/techTest-IGS/tut/04.InheritanceInCSandNET/bin/Debug/net6.0/04.InheritanceInCSandNET.runtimeconfig.json
+/Users/user/codeclan_work/afterCodeClan/techTest-IGS/tut/04.InheritanceInCSandNET/bin/Debug/net6.0/04.InheritanceInCSandNET.dll
+/Users/user/codeclan_work/afterCodeClan/techTest-IGS/tut/04.InheritanceInCSandNET/bin/Debug/net6.0/ref/04.InheritanceInCSandNET.dll
+/Users/user/codeclan_work/afterCodeClan/techTest-IGS/tut/04.InheritanceInCSandNET/bin/Debug/net6.0/04.InheritanceInCSandNET.pdb
+/Users/user/codeclan_work/afterCodeClan/techTest-IGS/tut/04.InheritanceInCSandNET/obj/Debug/net6.0/04.InheritanceInCSandNET.csproj.AssemblyReference.cache
+/Users/user/codeclan_work/afterCodeClan/techTest-IGS/tut/04.InheritanceInCSandNET/obj/Debug/net6.0/04.InheritanceInCSandNET.GeneratedMSBuildEditorConfig.editorconfig
+/Users/user/codeclan_work/afterCodeClan/techTest-IGS/tut/04.InheritanceInCSandNET/obj/Debug/net6.0/04.InheritanceInCSandNET.AssemblyInfoInputs.cache
+/Users/user/codeclan_work/afterCodeClan/techTest-IGS/tut/04.InheritanceInCSandNET/obj/Debug/net6.0/04.InheritanceInCSandNET.AssemblyInfo.cs
+/Users/user/codeclan_work/afterCodeClan/techTest-IGS/tut/04.InheritanceInCSandNET/obj/Debug/net6.0/04.InheritanceInCSandNET.csproj.CoreCompileInputs.cache
+/Users/user/codeclan_work/afterCodeClan/techTest-IGS/tut/04.InheritanceInCSandNET/obj/Debug/net6.0/04.InheritanceInCSandNET.dll
+/Users/user/codeclan_work/afterCodeClan/techTest-IGS/tut/04.InheritanceInCSandNET/obj/Debug/net6.0/ref/04.InheritanceInCSandNET.dll
+/Users/user/codeclan_work/afterCodeClan/techTest-IGS/tut/04.InheritanceInCSandNET/obj/Debug/net6.0/04.InheritanceInCSandNET.pdb
+/Users/user/codeclan_work/afterCodeClan/techTest-IGS/tut/04.InheritanceInCSandNET/obj/Debug/net6.0/04.InheritanceInCSandNET.genruntimeconfig.cache
