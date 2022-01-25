@@ -4,6 +4,21 @@ using System.Reflection;
 public class SimpleClass
 { }
 
+
+
+
+// The example displays the following output:
+//	Type SimpleClass has 9 members:
+//	ToString (Method):  Public, Declared by System.Object
+//	Equals (Method):  Public, Declared by System.Object
+//	Equals (Method):  Public Static, Declared by System.Object
+//	ReferenceEquals (Method):  Public Static, Declared by System.Object
+//	GetHashCode (Method):  Public, Declared by System.Object
+//	GetType (Method):  Public, Declared by System.Object
+//	Finalize (Method):  Internal, Declared by System.Object
+//	MemberwiseClone (Method):  Internal, Declared by System.Object
+//	.ctor (Constructor):  Public, Declared by SimpleClass
+
 public class SimpleClassExample
 {
     public static void Main()
@@ -15,6 +30,8 @@ public class SimpleClassExample
         carExample();
         spacer();
         publicationExample();
+        spacer();
+        shapeExample();
         ender();
     }
 
@@ -115,242 +132,317 @@ public class SimpleClassExample
     }
 
 
-}
-// The example displays the following output:
-//	Type SimpleClass has 9 members:
-//	ToString (Method):  Public, Declared by System.Object
-//	Equals (Method):  Public, Declared by System.Object
-//	Equals (Method):  Public Static, Declared by System.Object
-//	ReferenceEquals (Method):  Public Static, Declared by System.Object
-//	GetHashCode (Method):  Public, Declared by System.Object
-//	GetType (Method):  Public, Declared by System.Object
-//	Finalize (Method):  Internal, Declared by System.Object
-//	MemberwiseClone (Method):  Internal, Declared by System.Object
-//	.ctor (Constructor):  Public, Declared by SimpleClass
 
 
-public sealed class Book : Publication
-{
-    public Book(string title, string author, string publisher) :
-           this(title, String.Empty, author, publisher)
-    { }
-
-    public Book(string title, string isbn, string author, string publisher) : base(title, publisher, PublicationType.Book)
+    public static void shapeExample()
     {
-        // isbn argument must be a 10- or 13-character numeric string without "-" characters.
-        // We could also determine whether the ISBN is valid by comparing its checksum digit
-        // with a computed checksum.
-        //
-        if (!String.IsNullOrEmpty(isbn))
+        Square square = new Square(5);
+        Rectangle rectangle1 = new Rectangle(10, 12);
+        Rectangle rectangle2 = new Rectangle(4, 4);
+        Circle circle = new Circle(3);
+        Shape[] shapes = { rectangle1,rectangle2, square, circle };
+        foreach (var shape in shapes)
         {
-            // Determine if ISBN length is correct.
-            if (!(isbn.Length == 10 | isbn.Length == 13))
-                throw new ArgumentException("The ISBN must be a 10- or 13-character numeric string.");
-            ulong nISBN = 0;
-            if (!UInt64.TryParse(isbn, out nISBN))
-                throw new ArgumentException("The ISBN can consist of numeric characters only.");
-        }
-        ISBN = isbn;
+            Console.WriteLine($"{shape}: area, {Shape.GetArea(shape)}; " +
+                              $"perimeter, {Shape.GetPerimeter(shape)}");
+            var rect = shape as Rectangle;
+            if (rect != null)
+            {
+                Console.WriteLine($"   Is Square: {rect.IsSquare()}, Diagonal: {rect.Diagonal}");
+                continue;
+            }
+            var sq = shape as Square;
+            if (sq != null)
+            {
+                Console.WriteLine($"   Diagonal: {sq.Diagonal}");
+                continue;
+            }
 
-        Author = author;
-    }
-
-    public string ISBN { get; }
-
-    public string Author { get; }
-
-    public Decimal Price { get; private set; }
-
-    // A three-digit ISO currency symbol.
-    public string Currency { get; private set; }
-
-    // Returns the old price, and sets a new price.
-    public Decimal SetPrice(Decimal price, string currency)
-    {
-        if (price < 0)
-            throw new ArgumentOutOfRangeException(nameof(price), "The price cannot be negative.");
-        Decimal oldValue = Price;
-        Price = price;
-
-        if (currency.Length != 3)
-            throw new ArgumentException("The ISO currency symbol is a 3-character string.");
-        Currency = currency;
-
-        return oldValue;
-    }
-
-    public override bool Equals(object obj)
-    {
-        Book book = obj as Book;
-        if (book == null)
-            return false;
-        else
-            return ISBN == book.ISBN;
-    }
-
-    public override int GetHashCode() => ISBN.GetHashCode();
-
-    public override string ToString() => $"{(String.IsNullOrEmpty(Author) ? "" : Author + ", ")}{Title}";
-}
-
-public enum PublicationType { Misc, Book, Magazine, Article };
-public abstract class Publication
-{
-    private bool published = false;
-    private DateTime datePublished;
-    private int totalPages;
-
-    public Publication(string title, string publisher, PublicationType type)
-    {
-        if (String.IsNullOrWhiteSpace(publisher))
-            throw new ArgumentException("The publisher is required.");
-        Publisher = publisher;
-
-        if (String.IsNullOrWhiteSpace(title))
-            throw new ArgumentException("The title is required.");
-        Title = title;
-
-        Type = type;
-    }
-
-    public string Publisher { get; }
-
-    public string Title { get; }
-
-    public PublicationType Type { get; }
-
-    public string CopyrightName { get; private set; }
-
-    public int CopyrightDate { get; private set; }
-
-    public int Pages
-    {
-        get { return totalPages; }
-        set
-        {
-            if (value <= 0)
-                throw new ArgumentOutOfRangeException(nameof(value), "The number of pages cannot be zero or negative.");
-            totalPages = value;
-        }
-    }
-
-    public string GetPublicationDate()
-    {
-        if (!published)
-            return "NYP";
-        else
-            return datePublished.ToString("d");
-    }
-
-    public void Publish(DateTime datePublished)
-    {
-        published = true;
-        this.datePublished = datePublished;
-    }
-
-    public void Copyright(string copyrightName, int copyrightDate)
-    {
-        if (String.IsNullOrWhiteSpace(copyrightName))
-            throw new ArgumentException("The name of the copyright holder is required.");
-        CopyrightName = copyrightName;
-
-        int currentYear = DateTime.Now.Year;
-        if (copyrightDate < currentYear - 10 || copyrightDate > currentYear + 2)
-            throw new ArgumentOutOfRangeException($"The copyright year must be between {currentYear - 10} and {currentYear + 1}");
-        CopyrightDate = copyrightDate;
-    }
-
-    public override string ToString() => Title;
-
-}
-
-
-public class Automobile
-{
-    public Automobile(string make, string model, int year)
-    {
-        if (make == null)
-            throw new ArgumentNullException(nameof(make), "The make cannot be null.");
-        else if (String.IsNullOrWhiteSpace(make))
-            throw new ArgumentException("make cannot be an empty string or have space characters only.");
-        Make = make;
-
-        if (model == null)
-            throw new ArgumentNullException(nameof(model), "The model cannot be null.");
-        else if (String.IsNullOrWhiteSpace(model))
-            throw new ArgumentException("model cannot be an empty string or have space characters only.");
-        Model = model;
-
-        if (year < 1857 || year > DateTime.Now.Year + 2)
-            throw new ArgumentException("The year is out of range.");
-        Year = year;
-    }
-
-    public string Make { get; }
-
-    public string Model { get; }
-
-    public int Year { get; }
-
-    public override string ToString() => $"{Year} {Make} {Model}";
-}
-
-public abstract class AbstrClass
-{
-    public abstract void something();
-
-    public class derivedFromAbstrClass : AbstrClass
-    {
-        public override void something()
-        {
-
-        }
-    }
-}
-
-
-public class A
-{
-    private int value1 = 10;
-    public int value2 = 20;
-    public int value3 = 30;
-    public int value4 = 40;
-
-    //    public int Summation(){
-    public virtual int Summation()
-    {
-        return value1 + value2 + value3;
-    }
-
-
-
-    public class B : A
-    {
-        public int GetValue1()
-        {
-            return this.value1;
         }
 
 
+    }
+
+
+    public enum PublicationType { Misc, Book, Magazine, Article };
+    public abstract class Publication
+    {
+        private bool published = false;
+        private DateTime datePublished;
+        private int totalPages;
+
+        public Publication(string title, string publisher, PublicationType type)
+        {
+            if (String.IsNullOrWhiteSpace(publisher))
+                throw new ArgumentException("The publisher is required.");
+            Publisher = publisher;
+
+            if (String.IsNullOrWhiteSpace(title))
+                throw new ArgumentException("The title is required.");
+            Title = title;
+
+            Type = type;
+        }
+
+        public string Publisher { get; }
+
+        public string Title { get; }
+
+        public PublicationType Type { get; }
+
+        public string CopyrightName { get; private set; }
+
+        public int CopyrightDate { get; private set; }
+
+        public int Pages
+        {
+            get { return totalPages; }
+            set
+            {
+                if (value <= 0)
+                    throw new ArgumentOutOfRangeException(nameof(value), "The number of pages cannot be zero or negative.");
+                totalPages = value;
+            }
+        }
+
+        public string GetPublicationDate()
+        {
+            if (!published)
+                return "NYP";
+            else
+                return datePublished.ToString("d");
+        }
+
+        public void Publish(DateTime datePublished)
+        {
+            published = true;
+            this.datePublished = datePublished;
+        }
+
+        public void Copyright(string copyrightName, int copyrightDate)
+        {
+            if (String.IsNullOrWhiteSpace(copyrightName))
+                throw new ArgumentException("The name of the copyright holder is required.");
+            CopyrightName = copyrightName;
+
+            int currentYear = DateTime.Now.Year;
+            if (copyrightDate < currentYear - 10 || copyrightDate > currentYear + 2)
+                throw new ArgumentOutOfRangeException($"The copyright year must be between {currentYear - 10} and {currentYear + 1}");
+            CopyrightDate = copyrightDate;
+        }
+
+        public override string ToString() => Title;
+
+    }
+    public sealed class Book : Publication
+    {
+        public Book(string title, string author, string publisher) :
+               this(title, String.Empty, author, publisher)
+        { }
+
+        public Book(string title, string isbn, string author, string publisher) : base(title, publisher, PublicationType.Book)
+        {
+            // isbn argument must be a 10- or 13-character numeric string without "-" characters.
+            // We could also determine whether the ISBN is valid by comparing its checksum digit
+            // with a computed checksum.
+            //
+            if (!String.IsNullOrEmpty(isbn))
+            {
+                // Determine if ISBN length is correct.
+                if (!(isbn.Length == 10 | isbn.Length == 13))
+                    throw new ArgumentException("The ISBN must be a 10- or 13-character numeric string.");
+                ulong nISBN = 0;
+                if (!UInt64.TryParse(isbn, out nISBN))
+                    throw new ArgumentException("The ISBN can consist of numeric characters only.");
+            }
+            ISBN = isbn;
+
+            Author = author;
+        }
+
+        public string ISBN { get; }
+
+        public string Author { get; }
+
+        public Decimal Price { get; private set; }
+
+        // A three-digit ISO currency symbol.
+        public string Currency { get; private set; }
+
+        // Returns the old price, and sets a new price.
+        public Decimal SetPrice(Decimal price, string currency)
+        {
+            if (price < 0)
+                throw new ArgumentOutOfRangeException(nameof(price), "The price cannot be negative.");
+            Decimal oldValue = Price;
+            Price = price;
+
+            if (currency.Length != 3)
+                throw new ArgumentException("The ISO currency symbol is a 3-character string.");
+            Currency = currency;
+
+            return oldValue;
+        }
+
+        public override bool Equals(object obj)
+        {
+            Book book = obj as Book;
+            if (book == null)
+                return false;
+            else
+                return ISBN == book.ISBN;
+        }
+
+        public override int GetHashCode() => ISBN.GetHashCode();
+
+        public override string ToString() => $"{(String.IsNullOrEmpty(Author) ? "" : Author + ", ")}{Title}";
+    }
+
+
+    public abstract class Shape
+    {
+
+        public abstract double Area { get; }
+        public abstract double Perimeter { get; }
+
+        public override string ToString() => GetType().Name;
+        // {
+        //     return base.ToString();()
+        // }
+
+        public static double GetArea(Shape shape) => shape.Area;
+        public static double GetPerimeter(Shape shape) => shape.Perimeter;
+    }
+    public class Square : Shape
+    {
+        public double Side { get; }
+        public Square(double length)
+        {
+            Side = length;
+        }
+
+        public override double Area => Math.Pow(Side, 2);
+        public override double Perimeter => Side * 4;
+        public double Diagonal => Math.Round(Math.Sqrt(2) * Side, 2);
+
+    }
+    public class Rectangle : Shape
+    {
+        public double Length { get; }
+        public double Width { get; }
+        public Rectangle(double width, double length)
+        {
+            Length = length;
+            Width = width;
+        }
+        public override double Area => Length * Width;
+        public override double Perimeter => 2 * (Length + Width);
+        public bool IsSquare() => Length == Width;
+        public double Diagonal => Math.Round(Math.Sqrt(Math.Pow(Length, 2) + Math.Pow(Width, 2)), 2);
+    }
+
+    public class Circle : Shape
+    {
+        public double Radius { get; }
+        public Circle(double radius)
+        {
+            Radius = radius;
+        }
+
+        public override double Area => Math.Round(Math.PI * (Math.Pow(Radius, 2)), 2);
+        public override double Perimeter => Math.Round(2 * Math.PI * Radius, 2);
+        public double Circumference => Perimeter;
+        public double Diameter => Radius * 2;
+    }
 
 
 
+    public class Automobile
+    {
+        public Automobile(string make, string model, int year)
+        {
+            if (make == null)
+                throw new ArgumentNullException(nameof(make), "The make cannot be null.");
+            else if (String.IsNullOrWhiteSpace(make))
+                throw new ArgumentException("make cannot be an empty string or have space characters only.");
+            Make = make;
+
+            if (model == null)
+                throw new ArgumentNullException(nameof(model), "The model cannot be null.");
+            else if (String.IsNullOrWhiteSpace(model))
+                throw new ArgumentException("model cannot be an empty string or have space characters only.");
+            Model = model;
+
+            if (year < 1857 || year > DateTime.Now.Year + 2)
+                throw new ArgumentException("The year is out of range.");
+            Year = year;
+        }
+
+        public string Make { get; }
+
+        public string Model { get; }
+
+        public int Year { get; }
+
+        public override string ToString() => $"{Year} {Make} {Model}";
+    }
+
+    public abstract class AbstrClass
+    {
+        public abstract void something();
+
+        public class derivedFromAbstrClass : AbstrClass
+        {
+            public override void something()
+            {
+
+            }
+        }
+    }
+
+
+    public class A
+    {
+        private int value1 = 10;
+        public int value2 = 20;
+        public int value3 = 30;
+        public int value4 = 40;
+
+        //    public int Summation(){
+        public virtual int Summation()
+        {
+            return value1 + value2 + value3;
+        }
+
+
+
+        public class B : A
+        {
+            public int GetValue1()
+            {
+                return this.value1;
+            }
+
+
+
+
+
+        }
+    }
+
+    public class C : A
+    {
+        public int GetValue2()
+        {
+            return this.value2;
+        }
+
+        public override int Summation()
+        {
+            return value2 + value3 + value4;
+        }
     }
 }
-
-public class C : A
-{
-    public int GetValue2()
-    {
-        return this.value2;
-    }
-
-    public override int Summation()
-    {
-        return value2 + value3 + value4;
-    }
-}
-
 //! 
 // public class AccessExample
 // {
